@@ -1,0 +1,61 @@
+#!/bin/sh
+
+#
+# Configuration.default
+#
+
+#
+#  If the MGICONFIG environment variable does not have a local override,
+#  use the default "live" settings.
+#
+if [ "${MGICONFIG}" = "" ]
+then
+    MGICONFIG=/usr/local/mgi/live/mgiconfig
+    export MGICONFIG
+fi
+
+. ${MGICONFIG}/master.config.sh
+
+#
+# Directory paths
+#
+GENSATLOAD_DATADIR=/data/loads/gensat/gensatload
+GENSATLOAD_INPUTDIR=${GENSATLOAD_DATADIR}/input
+GENSATLOAD_OUTPUTDIR=${GENSATLOAD_DATADIR}/output
+GENSATLOAD_LOGDIR=${GENSATLOAD_DATADIR}/logs
+GENSATLOAD_RPTDIR=${GENSATLOAD_DATADIR}/reports
+
+export GENSATLOAD_DATADIR GENSATLOAD_INPUTDIR GENSATLOAD_OUTPUTDIR
+export GENSATLOAD_LOGDIR GENSATLOAD_RPTDIR
+
+#
+# Input/Output files
+#
+GENSATLOAD_INPUTFILE=${GENSATLOAD_INPUTDIR}/gensatload_input.txt
+GENSATLOAD_ACC_BCPFILE=${GENSATLOAD_OUTPUTDIR}/ACC_Accession.bcp
+GENSATLOAD_LOGFILE=${GENSATLOAD_LOGDIR}/gensatload.log
+GENSATLOAD_RPTFILE=${GENSATLOAD_RPTDIR}/gensatload.rpt
+
+export GENSATLOAD_INPUTFILE GENSATLOAD_ACC_BCPFILE
+export GENSATLOAD_LOGFILE GENSATLOAD_RPTFILE
+
+#
+# GENSAT query tool settings
+#
+GENSATTOOL_DB=gene
+GENSATTOOL_MAX_ROWS=100000
+GENSATTOOL_URL="http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?"
+
+export GENSATTOOL_DB GENSATTOOL_MAX_ROWS GENSATTOOL_URL
+
+#
+# Miscellaneous settings
+#
+GENSAT_TEMP_TABLE=GENSAT_Data
+GENSAT_LOGICAL_DB=GENSAT
+EG_LOGICAL_DB="Entrez Gene"
+MARKER_MGITYPE=Marker
+GENSAT_CREATED_BY="GENSAT Load"
+
+export GENSAT_TEMP_TABLE GENSAT_LOGICAL_DB EG_LOGICAL_DB
+export MARKER_MGITYPE GENSAT_CREATED_BY

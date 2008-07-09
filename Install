@@ -1,0 +1,27 @@
+#!/bin/sh
+
+#
+# Install
+#
+cd `dirname $0`
+. ./Configuration
+
+if [ ! -d ${GENSATLOAD_INPUTDIR} ]
+then
+    mkdir -p ${GENSATLOAD_INPUTDIR}
+fi
+
+if [ ! -d ${GENSATLOAD_OUTPUTDIR} ]
+then
+    mkdir -p ${GENSATLOAD_OUTPUTDIR}
+fi
+
+if [ ! -d ${GENSATLOAD_LOGDIR} ]
+then
+    mkdir -p ${GENSATLOAD_LOGDIR}
+fi
+
+if [ ! -d ${GENSATLOAD_RPTDIR} ]
+then
+    mkdir -p ${GENSATLOAD_RPTDIR}
+fi
