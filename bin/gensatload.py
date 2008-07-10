@@ -243,12 +243,12 @@ def createReport ():
     # Find any cases where the EntrezGene ID from the input file is not
     # associated with a marker.
     #
-    cmds.append('select gs.entrezgeneID ' + \
+    cmds.append('select t.entrezgeneID ' + \
                 'into #not_in_mgi ' + \
-                'from tempdb..GENSAT_Data gs ' + \
+                'from tempdb..' + tempTable + ' t ' + \
                 'where not exists (select 1 ' + \
                                   'from ACC_Accession a ' + \
-                                  'where a.accID = gs.entrezgeneID and ' + \
+                                  'where a.accID = t.entrezgeneID and ' + \
                                         'a._MGIType_key = ' + str(markerMGITypeKey) + ' and ' + \
                                         'a._LogicalDB_key = ' + str(egLogicalDBKey) + ')')
 
@@ -259,13 +259,13 @@ def createReport ():
     # Find any cases where the EntrezGene ID from the input file is
     # associated with more than one marker.
     #
-    cmds.append('select gs.entrezgeneID ' + \
+    cmds.append('select t.entrezgeneID ' + \
                 'into #many_marker ' + \
-                'from tempdb..GENSAT_Data gs, ACC_Accession a ' + \
-                'where gs.entrezgeneID = a.accID and ' + \
+                'from tempdb..' + tempTable + ' t, ACC_Accession a ' + \
+                'where t.entrezgeneID = a.accID and ' + \
                       'a._MGIType_key = ' + str(markerMGITypeKey) + ' and ' + \
                       'a._LogicalDB_key = ' + str(egLogicalDBKey) + ' ' + \
-                'group by gs.entrezgeneID ' + \
+                'group by t.entrezgeneID ' + \
                 'having count(*) > 1')
 
     cmds.append('select entrezgeneID from #many_marker ' + \
@@ -283,10 +283,10 @@ def createReport ():
                 'group by a._Object_key ' + \
                 'having count(*) > 1')
 
-    cmds.append('select gs.entrezgeneID ' + \
+    cmds.append('select t.entrezgeneID ' + \
                 'into #many_eg ' + \
-                'from tempdb..GENSAT_Data gs, ACC_Accession a, #markers m ' + \
-                'where gs.entrezgeneID = a.accID and ' + \
+                'from tempdb..' + tempTable + ' t, ACC_Accession a, #markers m ' + \
+                'where t.entrezgeneID = a.accID and ' + \
                       'a._MGIType_key = ' + str(markerMGITypeKey) + ' and ' + \
                       'a._LogicalDB_key = ' + str(egLogicalDBKey) + ' and ' + \
                       'a._Object_key = m._Object_key')
@@ -351,12 +351,12 @@ def createBCPFile ():
     # discrepancy report.
     #
     cmds = []
-    cmds.append('select gs.entrezgeneID, a._Object_key "markerKey" ' + \
-                'from tempdb..GENSAT_Data gs, ACC_Accession a ' + \
-                'where gs.entrezgeneID = a.accID and ' + \
+    cmds.append('select t.entrezgeneID, a._Object_key "markerKey" ' + \
+                'from tempdb..' + tempTable + ' t, ACC_Accession a ' + \
+                'where t.entrezgeneID = a.accID and ' + \
                       'a._MGIType_key = ' + str(markerMGITypeKey) + ' and ' + \
                       'a._LogicalDB_key = ' + str(egLogicalDBKey) + ' ' + \
-                'order by gs.entrezgeneID')
+                'order by t.entrezgeneID')
 
     results = db.sql(cmds,'auto')
 
