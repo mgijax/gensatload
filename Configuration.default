@@ -19,7 +19,11 @@ fi
 #
 # Directory paths
 #
-GENSATLOAD_DATADIR=/data/loads/gensat/gensatload
+# The file we parse to create the load input file
+INPUTFILE=${DATADOWNLOADS}/www.gensat.org/report/EntrezGeneIds.txt
+export INPUTFILE
+
+GENSATLOAD_DATADIR=${DATALOADSOUTPUT}/gensat/gensatload
 GENSATLOAD_INPUTDIR=${GENSATLOAD_DATADIR}/input
 GENSATLOAD_OUTPUTDIR=${GENSATLOAD_DATADIR}/output
 GENSATLOAD_LOGDIR=${GENSATLOAD_DATADIR}/logs
@@ -38,15 +42,6 @@ GENSATLOAD_RPTFILE=${GENSATLOAD_RPTDIR}/gensatload.rpt
 
 export GENSATLOAD_INPUTFILE GENSATLOAD_ACC_BCPFILE
 export GENSATLOAD_LOGFILE GENSATLOAD_RPTFILE
-
-#
-# GENSAT query tool settings
-#
-GENSATTOOL_DB=gene
-GENSATTOOL_MAX_ROWS=100000
-GENSATTOOL_URL="http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?"
-
-export GENSATTOOL_DB GENSATTOOL_MAX_ROWS GENSATTOOL_URL
 
 #
 # Miscellaneous settings

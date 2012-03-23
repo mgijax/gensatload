@@ -36,8 +36,8 @@
 #
 #      This script will perform following steps:
 #
-#      1) Call the Python script (getGensatEntrez.py) to generate the input
-#         file for the load by invoking the GENSAT query tool.
+#      1) Call the Python script (parseGensatEntrez.py) to generate the input
+#         file for the load 
 #      2) Create the temp table for the input data.
 #      3) Load the input file into the temp table.
 #      4) Call the Python script (gensatload.py) to create a bcp file with
@@ -81,7 +81,7 @@ trap "rm -f ${TMP_RC}" 0 1 2 15
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Generate the input file for the load" | tee -a ${LOG}
-{ ./getGensatEntrez.py 2>&1; echo $? > ${TMP_RC}; } >> ${LOG}
+{ ./parseGensatEntrez.py 2>&1; echo $? > ${TMP_RC}; } >> ${LOG}
 if [ `cat ${TMP_RC}` -ne 0 ]
 then
     echo "GENSAT load failed" | tee -a ${LOG}

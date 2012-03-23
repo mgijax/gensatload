@@ -1,3 +1,13 @@
+TAG: gensatload-4-4-2-1
+DATE: 03/21/2012
+STAFF: sc
+CHANGES: TR11011 Gensat load broken
+1) rm getGensatEntrez.py, no longer getting input from NCBI
+2) added parseGensatEntrez.py, no getting file from gensat via
+   mirror_ftp
+2) Configuration.default - removed config to get file 
+    from NCBI  (GENSATTOOL*), added INPUTFILE
+
 TAG: gensatload-4-4-0-1
 DATE: 10/18/2010
 STAFF: dbm
@@ -18,4 +28,7 @@ TAG: gensatload-4-1-1-1
 DATE: 07/09/2008
 STAFF: dbm
 CHANGES: New load (TR9100)
+TE: 10/18/2010
+STAFF: dbm
+CHANGES:
 
