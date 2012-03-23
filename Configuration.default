@@ -21,7 +21,11 @@ fi
 #
 # The file we parse to create the load input file
 INPUTFILE=${DATADOWNLOADS}/www.gensat.org/report/EntrezGeneIds.txt
-export INPUTFILE
+
+# A backup of the input file so we can detect changes
+INPUTFILE_BAK=${DATADOWNLOADS}/www.gensat.org/report/EntrezGeneIds.txt.bak
+
+export INPUTFILE INPUTFILE_BAK
 
 GENSATLOAD_DATADIR=${DATALOADSOUTPUT}/gensat/gensatload
 GENSATLOAD_INPUTDIR=${GENSATLOAD_DATADIR}/input

@@ -1,3 +1,10 @@
+TAG: gensatload-4-4-2-2
+DATE: 03/23/2012
+STAFF: sc
+CHANGES: TR11011 Gensat load broken
+1) Added diffing of input file against copy of last input file to 
+   determine if  need to run
+
 TAG: gensatload-4-4-2-1
 DATE: 03/21/2012
 STAFF: sc

@@ -73,7 +73,21 @@ touch ${LOG}
 # Python script.  Make sure the file is removed when this script terminates.
 #
 TMP_RC=/tmp/`basename $0`.$$
-trap "rm -f ${TMP_RC}" 0 1 2 15
+TMP_DIFF=/tmp/`basename $0`.diff.$$
+trap "rm -f ${TMP_RC} ${TMP_DIFF}" 0 1 2 15
+
+if [ -f ${INPUTFILE_BAK} ]
+then
+    diff ${INPUTFILE} ${INPUTFILE_BAK} >> ${TMP_DIFF} 2>&1
+    # if the diff file is empty don't run the load
+    if [ ! -s ${TMP_DIFF} ] 
+    then
+	echo "The GENSAT load input file has not changed " | tee -a ${LOG}
+	echo "" >> ${LOG}
+	date >> ${LOG}
+	exit 0
+    fi
+fi
 
 #
 # Generate the input file for the load.
@@ -197,6 +211,12 @@ echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the new GENSAT associations" | tee -a ${LOG}
 cat ${MGD_DBPASSWORDFILE} | bcp ${MGD_DBNAME}..ACC_Accession in ${GENSATLOAD_ACC_BCPFILE} -c -t\\t -S${MGD_DBSERVER} -U${MGD_DBUSER} >> ${LOG}
+
+date >> ${LOG}
+
+echo "" >> ${LOG}
+echo "Backup processed file" | tee -a ${LOG}
+cp -p ${INPUTFILE} ${INPUTFILE_BAK}
 
 date >> ${LOG}
 
