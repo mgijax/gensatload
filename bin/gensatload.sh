@@ -195,7 +195,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the new GENSAT associations" | tee -a ${LOG}
-${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ACC_Accession "/" ${GENSATLOAD_ACC_INPUTFILE} "\t" "\n" mgd >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ACC_Accession "/" ${GENSATLOAD_ACC_BCPFILE} "\t" "\n" mgd >> ${LOG}
 
 date >> ${LOG}
 
