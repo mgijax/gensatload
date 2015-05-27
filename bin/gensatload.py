@@ -285,7 +285,7 @@ def createReport ():
 
     cmds.append('select t.entrezgeneID ' + \
                 'into temp many_eg ' + \
-                'from ' + tempTable + ' t, ACC_Accession a, #markers m ' + \
+                'from ' + tempTable + ' t, ACC_Accession a, markers m ' + \
                 'where lower(t.entrezgeneID) = lower(a.accID) and ' + \
                       'a._MGIType_key = ' + str(markerMGITypeKey) + ' and ' + \
                       'a._LogicalDB_key = ' + str(egLogicalDBKey) + ' and ' + \
