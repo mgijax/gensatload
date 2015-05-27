@@ -130,7 +130,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the input file into the temp table" | tee -a ${LOG}
-${PB_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ${GENSAT_TEMP_TABLE} "/" ${GENSATLOAD_INPUTFILE} "\t" "\n" mgd >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ${GENSAT_TEMP_TABLE} "/" ${GENSATLOAD_INPUTFILE} "\t" "\n" mgd >> ${LOG}
 
 #
 # Create the GENSAT association file and discrepancy report.
@@ -195,7 +195,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the new GENSAT associations" | tee -a ${LOG}
-${PB_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ACC_Accession "/" ${GENSATLOAD_ACC_INPUTFILE} "\t" "\n" mgd >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ACC_Accession "/" ${GENSATLOAD_ACC_INPUTFILE} "\t" "\n" mgd >> ${LOG}
 
 date >> ${LOG}
 
