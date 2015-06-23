@@ -112,7 +112,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Create the temp table (${GENSAT_TEMP_TABLE}) for the input data" | tee -a ${LOG}
-cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U ${MGD_DBUSER} -e  >> ${LOG}
 
 create table ${GENSAT_TEMP_TABLE} (
     entrezgeneID varchar(30) not null
@@ -130,7 +130,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the input file into the temp table" | tee -a ${LOG}
-${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ${GENSAT_TEMP_TABLE} "/" ${GENSATLOAD_INPUTFILE} "\t" "\n" mgd >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME} ${GENSAT_TEMP_TABLE} "/" ${GENSATLOAD_INPUTFILE} "\t" "\n" mgd >> ${LOG}
 
 #
 # Create the GENSAT association file and discrepancy report.
@@ -157,7 +157,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Drop the temp table (${GENSAT_TEMP_TABLE})" | tee -a ${LOG}
-cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U ${MGD_DBUSER} -e  >> ${LOG}
 
 drop table ${GENSAT_TEMP_TABLE};
 
@@ -178,7 +178,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Delete the existing GENSAT associations" | tee -a ${LOG}
-cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U ${MGD_DBUSER} -e  >> ${LOG}
 
 
 delete from ACC_Accession a
@@ -195,7 +195,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the new GENSAT associations" | tee -a ${LOG}
-${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} ACC_Accession "/" ${GENSATLOAD_ACC_BCPFILE} "\t" "\n" mgd >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME} ACC_Accession "/" ${GENSATLOAD_ACC_BCPFILE} "\t" "\n" mgd >> ${LOG}
 
 date >> ${LOG}
 
