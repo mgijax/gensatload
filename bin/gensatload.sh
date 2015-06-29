@@ -112,23 +112,16 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Create the temp table (${GENSAT_TEMP_TABLE}) for the input data" | tee -a ${LOG}
-cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -Umgd_dbo -P`cat ${MGD_DBPASSWORDFILE}` -e  >> ${LOG}
-
-use tempdb
-go
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U ${MGD_DBUSER} -e  >> ${LOG}
 
 create table ${GENSAT_TEMP_TABLE} (
     entrezgeneID varchar(30) not null
-)
-go
+);
 
-create nonclustered index idx_entrezgeneID on ${GENSAT_TEMP_TABLE} (entrezgeneID)
-go
+create index idx_entrezgeneID on ${GENSAT_TEMP_TABLE} (lower(entrezgeneID));
 
-grant all on ${GENSAT_TEMP_TABLE} to public
-go
+grant all on ${GENSAT_TEMP_TABLE} to public;
 
-quit
 EOSQL
 
 #
@@ -137,7 +130,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the input file into the temp table" | tee -a ${LOG}
-cat ${MGD_DBPASSWORDFILE} | bcp tempdb..${GENSAT_TEMP_TABLE} in ${GENSATLOAD_INPUTFILE} -c -t\\t -S${MGD_DBSERVER} -U${MGD_DBUSER} >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME} ${GENSAT_TEMP_TABLE} "/" ${GENSATLOAD_INPUTFILE} "\t" "\n" mgd >> ${LOG}
 
 #
 # Create the GENSAT association file and discrepancy report.
@@ -164,15 +157,10 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Drop the temp table (${GENSAT_TEMP_TABLE})" | tee -a ${LOG}
-cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -Umgd_dbo -P`cat ${MGD_DBPASSWORDFILE}` -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U ${MGD_DBUSER} -e  >> ${LOG}
 
-use tempdb
-go
+drop table ${GENSAT_TEMP_TABLE};
 
-drop table ${GENSAT_TEMP_TABLE}
-go
-
-quit
 EOSQL
 
 #
@@ -190,18 +178,15 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Delete the existing GENSAT associations" | tee -a ${LOG}
-cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -Umgd_dbo -P`cat ${MGD_DBPASSWORDFILE}` -e >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U ${MGD_DBUSER} -e  >> ${LOG}
 
-declare @logicalDBKey int
-select @logicalDBKey = _LogicalDB_key
-from ACC_LogicalDB
-where name = 'GENSAT'
 
-delete from ACC_Accession
-where _LogicalDB_key = @logicalDBKey
-go
+delete from ACC_Accession a
+using ACC_LogicalDB ldb
+where ldb._LogicalDB_key = a._logicaldb_key
+	and ldb.name = 'GENSAT'
+;
 
-quit
 EOSQL
 
 #
@@ -210,7 +195,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Load the new GENSAT associations" | tee -a ${LOG}
-cat ${MGD_DBPASSWORDFILE} | bcp ${MGD_DBNAME}..ACC_Accession in ${GENSATLOAD_ACC_BCPFILE} -c -t\\t -S${MGD_DBSERVER} -U${MGD_DBUSER} >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME} ACC_Accession "/" ${GENSATLOAD_ACC_BCPFILE} "\t" "\n" mgd >> ${LOG}
 
 date >> ${LOG}
 
